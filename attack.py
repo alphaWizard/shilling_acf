@@ -1,6 +1,6 @@
 import numpy as np
 import random
-import pandas as pd
+import pandas as pd 
 import scipy.stats
 import matplotlib.pyplot as plt
 import csv
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     # toberated_data = readFile("toBeRated.csv")
     # rec_mat = np.zeros((users,items))
     # target_item_set = random.sample(range(1,items+1), 50) #50 target items -id
-    target_user_set = random.sample(range(1,users+1), 63) #63 target users -id
+    # target_user_set = random.sample(range(1,users+1), 63) #63 target users -id
 
     # with open('target_item_set.pkl', 'wb') as f:
     #     pickle.dump(target_item_set, f)

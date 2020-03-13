@@ -7,13 +7,13 @@ from sklearn.metrics import mean_squared_error
 from math import sqrt
 import math
 import warnings
-import sys
+import sys 
 #from sklearn.utils.extmath import np.dot
 
 warnings.simplefilter("error")
 
-users = 6040
-items = 3952
+# users = 943
+items = 1682
 
 def readingFile(filename):
 	f = open(filename,"r")
@@ -24,8 +24,12 @@ def readingFile(filename):
 		data.append(e)
 	return data
 
-def userData():
+def userData(mode='default'):
 	filename = sys.argv[3]
+	if mode == 'attack':
+		users = 943 + 30
+	else:
+		users = 943
 	f = open(filename,"r")
 	data = np.zeros((users,3))
 	for row in f:
@@ -54,7 +58,7 @@ def itemData():
 
 	return data
 
-def similarity_item(data):
+def similarity_item(data,mode='default'):
 	print("Hello Item")
 	#f_i_d = open("sim_item_hybrid.txt","w")
 	item_similarity_cosine = np.zeros((items,items))
@@ -79,8 +83,12 @@ def similarity_item(data):
 	return item_similarity_cosine, item_similarity_jaccard, item_similarity_pearson
 
 
-def similarity_user(data):
+def similarity_user(data,mode='default'):
 	print("Hello User")
+	if mode == 'attack':
+		users = 943 + 30
+	else:
+		users = 943
 	#f_i_d = open("sim_user_hybrid.txt","w")
 	user_similarity_cosine = np.zeros((users,users))
 	user_similarity_jaccard = np.zeros((users,users))
@@ -103,11 +111,11 @@ def similarity_user(data):
 	#f_i_d.close()
 	return user_similarity_cosine, user_similarity_jaccard, user_similarity_pearson
 
-def crossValidation(data, user_data, item_data):
+def crossValidation(data, user_data, item_data,mode='default'):
 	# k_fold = KFold(n=len(data), n_folds=10)
 
-	sim_user_cosine, sim_user_jaccard, sim_user_pearson = similarity_user(user_data)
-	sim_item_cosine, sim_item_jaccard, sim_item_pearson = similarity_item(item_data)
+	sim_user_cosine, sim_user_jaccard, sim_user_pearson = similarity_user(user_data,mode=mode)
+	sim_item_cosine, sim_item_jaccard, sim_item_pearson = similarity_item(item_data,mode=mode)
 	#sim_user_cosine, sim_user_jaccard, sim_user_pearson = np.random.rand(users,users), np.random.rand(users,users), np.random.rand(users,users)
 	#sim_item_cosine, sim_item_jaccard, sim_item_pearson = np.random.rand(items,items), np.random.rand(items,items), np.random.rand(items,items) 
 
@@ -337,9 +345,13 @@ def crossValidation(data, user_data, item_data):
 	return sim_user_cosine, sim_item_cosine
 
 
-def predictRating(data, user_data, item_data):
+def predictRating(data, user_data, item_data,mode='default'):
 
 	sim_user, sim_item = crossValidation(data, user_data, item_data)
+	if mode=='attack':
+		users = 943+ 30
+	else:
+		users = 943
 
 	M = np.zeros((users,items))
 	for e in data:
@@ -423,9 +435,9 @@ def predictRating(data, user_data, item_data):
 
 #recommend_data = readingFile("ratings.csv")
 recommend_data = readingFile(sys.argv[1])
-user_data = userData()
-item_data = itemData()
-predictRating(recommend_data, user_data, item_data)
+user_data = userData(mode='default')
+item_data = itemData(mode='default')
+predictRating(recommend_data, user_data, item_data,mode='default')
 #crossValidation(recommend_data, user_data, item_data)
 
 

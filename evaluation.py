@@ -1,6 +1,7 @@
 import random
 import pickle
-import csv
+import csv 
+import sys
 
 users_count = 943
 items_count = 1682
@@ -124,18 +125,21 @@ def prediction_shift(resultfile1,resultfile2):
 
 
 if __name__ == "__main__":
-    target_user_set = random.sample(range(1,users_count+1), 63) #63 target users -id
+    # target_user_set = random.sample(range(1,users_count+1), 63) #63 target users -id
 
     # with open('target_user_set.pkl', 'wb') as f:
     #     pickle.dump(target_user_set, f)
 
-    # with open('target_user_set.pkl', 'rb') as f:
-    #     target_user_set = pickle.load(f)
+    with open('target_user_set.pkl', 'rb') as f:
+        target_user_set = pickle.load(f)
 
-    # with open('target_item_set.pkl', 'rb') as f:
-    #     target_item_set = pickle.load(f)
+    with open('target_item_set.pkl', 'rb') as f:
+        target_item_set = pickle.load(f)
     
     # evaluation(attackfilename='ratings_updated_rand_attack.csv',target_item_set=target_item_set,target_user_set=target_user_set)
 
-    prediction_shift('result_user_based_before_attack.csv','result_user_based_after_attack.csv')
+    # prediction_shift('result_item_based_before_attack.csv','result_item_based_after_avg_attack.csv')
+    file1 = sys.argv[1]
+    file2 = sys.argv[2]
+    prediction_shift(file1,file2)
 

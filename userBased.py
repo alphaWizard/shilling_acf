@@ -5,7 +5,7 @@ import scipy.spatial
 import random
 from sklearn.metrics import mean_squared_error
 from math import sqrt
-import math
+import math 
 import warnings
 import sys
 import csv
@@ -13,7 +13,7 @@ import csv
 
 warnings.simplefilter("error")
 
-users = 943 + 30  # attack
+# users = 943
 items = 1682
 
 def readingFile(filename):
@@ -25,8 +25,12 @@ def readingFile(filename):
 		data.append(e)
 	return data
 
-def similarity_user(data):
+def similarity_user(data,mode='default'):
 	print("Hello User")
+	if mode == 'attack':
+		users = 943 + 30
+	else: 
+		users = 943
 	#f_i_d = open("sim_user_based.txt","w")
 	user_similarity_cosine = np.zeros((users,users))
 	user_similarity_jaccard = np.zeros((users,users))
@@ -49,15 +53,20 @@ def similarity_user(data):
 	#f_i_d.close()
 	return user_similarity_cosine, user_similarity_jaccard, user_similarity_pearson
 
-def crossValidation(data):
+def crossValidation(data,mode='default'):
 	# k_fold = KFold(n=len(data), n_folds=10)
 	# k_fold = KFold(n_splits=10)
+	if mode == 'attack':
+		# print("here")
+		users = 943 + 30
+	else:
+		users = 943
 
 	Mat = np.zeros((users,items))
 	for e in data:
 		Mat[e[0]-1][e[1]-1] = e[2]
 
-	sim_user_cosine, sim_user_jaccard, sim_user_pearson = similarity_user(Mat)
+	sim_user_cosine, sim_user_jaccard, sim_user_pearson = similarity_user(Mat,mode=mode)
 	#sim_user_cosine, sim_user_jaccard, sim_user_pearson = np.random.rand(users,users), np.random.rand(users,users), np.random.rand(users,users)
 
 	'''sim_user_cosine = np.zeros((users,users))
@@ -178,9 +187,9 @@ def crossValidation(data):
 	return Mat, sim_user_cosine
 
 
-def predictRating(recommend_data,resultfile='result_user_based_before_attack.csv'):
+def predictRating(recommend_data,resultfile='result_user_based_before_attack.csv',mode='default'):
 
-	M, sim_user = crossValidation(recommend_data)
+	M, sim_user = crossValidation(recommend_data,mode=mode)
 
 	#f = open("toBeRated.csv","r")
 	f = open(sys.argv[2],"r")   #toberated file
@@ -230,8 +239,14 @@ def predictRating(recommend_data,resultfile='result_user_based_before_attack.csv
 	#fw.close()
 	fw_w.close()
 
-#recommend_data = readingFile("ratings.csv")
-recommend_data = readingFile(sys.argv[1])
-#crossValidation(recommend_data)
-predictRating(recommend_data,resultfile='result_user_based_after_attack.csv')
+
+if __name__ == "__main__":
+
+	#recommend_data = readingFile("ratings.csv")
+	recommend_data = readingFile(sys.argv[1])
+	#crossValidation(recommend_data)
+	mode = sys.argv[3]
+	resultfile = sys.argv[4]
+	# print(mode)
+	predictRating(recommend_data,resultfile=resultfile,mode=mode)
 

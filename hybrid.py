@@ -8,9 +8,10 @@ from math import sqrt
 import math
 import warnings
 import sys 
+import csv
 #from sklearn.utils.extmath import np.dot
 
-warnings.simplefilter("error")
+warnings.simplefilter("ignore")
 
 # users = 943
 items = 1682
@@ -20,7 +21,7 @@ def readingFile(filename):
 	data = []
 	for row in f:
 		r = row.split(',')
-		e = [int(r[0]), int(r[1]), int(r[2])]
+		e = [int(r[0]), int(r[1]), float(r[2])]
 		data.append(e)
 	return data
 
@@ -59,7 +60,7 @@ def itemData():
 	return data
 
 def similarity_item(data,mode='default'):
-	print("Hello Item")
+	# print("Hello Item")
 	#f_i_d = open("sim_item_hybrid.txt","w")
 	item_similarity_cosine = np.zeros((items,items))
 	item_similarity_jaccard = np.zeros((items,items))
@@ -84,7 +85,7 @@ def similarity_item(data,mode='default'):
 
 
 def similarity_user(data,mode='default'):
-	print("Hello User")
+	# print("Hello User")
 	if mode == 'attack':
 		users = 943 + 30
 	else:
@@ -119,229 +120,6 @@ def crossValidation(data, user_data, item_data,mode='default'):
 	#sim_user_cosine, sim_user_jaccard, sim_user_pearson = np.random.rand(users,users), np.random.rand(users,users), np.random.rand(users,users)
 	#sim_item_cosine, sim_item_jaccard, sim_item_pearson = np.random.rand(items,items), np.random.rand(items,items), np.random.rand(items,items) 
 
-	'''sim_user_cosine = np.zeros((users,users))
-	sim_user_jaccard = np.zeros((users,users))
-	sim_user_pearson = np.zeros((users,users))
-
-	f_sim = open("sim_user_hybrid.txt", "r")
-	for row in f_sim:
-		#print row
-		r = row.strip().split(',')
-		sim_user_cosine[int(r[0])][int(r[1])] = float(r[2])
-		sim_user_jaccard[int(r[0])][int(r[1])] = float(r[3])
-		sim_user_pearson[int(r[0])][int(r[1])] = float(r[4])
-	f_sim.close()
-
-
-	sim_item_cosine = np.zeros((items,items))
-	sim_item_jaccard = np.zeros((items,items))
-	sim_item_pearson = np.zeros((items,items))
-
-	f_sim_i = open("sim_item_hybrid.txt", "r")
-	for row in f_sim_i:
-		#print row
-		r = row.strip().split(',')
-		sim_item_cosine[int(r[0])][int(r[1])] = float(r[2])
-		sim_item_jaccard[int(r[0])][int(r[1])] = float(r[3])
-		sim_item_pearson[int(r[0])][int(r[1])] = float(r[4])
-	f_sim_i.close()'''
-
-	# rmse_cosine = []
-	# rmse_jaccard = []
-	# rmse_pearson = []
-
-	# for train_indices, test_indices in k_fold:
-	# 	train = [data[i] for i in train_indices]
-	# 	test = [data[i] for i in test_indices]
-
-	# 	M = np.zeros((users,items))
-
-	# 	for e in train:
-	# 		M[e[0]-1][e[1]-1] = e[2]
-
-	# 	true_rate = []
-	# 	pred_rate_cosine = []
-	# 	pred_rate_jaccard = []
-	# 	pred_rate_pearson = []
-
-	# 	for e in test:
-	# 		user = e[0]
-	# 		item = e[1]
-	# 		true_rate.append(e[2])
-
-	# 		user_pred_cosine = 3.0
-	# 		item_pred_cosine = 3.0
-
-	# 		user_pred_jaccard = 3.0
-	# 		item_pred_jaccard = 3.0
-
-	# 		user_pred_pearson = 3.0
-	# 		item_pred_pearson = 3.0
-
-	# 		#item-based
-	# 		if np.count_nonzero(M[:,item-1]):
-	# 			sim_cosine = sim_item_cosine[item-1]
-	# 			sim_jaccard = sim_item_jaccard[item-1]
-	# 			sim_pearson = sim_item_pearson[item-1]
-	# 			ind = (M[user-1] > 0)
-	# 			#ind[item-1] = False
-	# 			normal_cosine = np.sum(np.absolute(sim_cosine[ind]))
-	# 			normal_jaccard = np.sum(np.absolute(sim_jaccard[ind]))
-	# 			normal_pearson = np.sum(np.absolute(sim_pearson[ind]))
-	# 			if normal_cosine > 0:
-	# 				item_pred_cosine = np.dot(sim_cosine,M[user-1])/normal_cosine
-
-	# 			if normal_jaccard > 0:
-	# 				item_pred_jaccard = np.dot(sim_jaccard,M[user-1])/normal_jaccard
-
-	# 			if normal_pearson > 0:
-	# 				item_pred_pearson = np.dot(sim_pearson,M[user-1])/normal_pearson
-
-	# 		if item_pred_cosine < 0:
-	# 			item_pred_cosine = 0
-
-	# 		if item_pred_cosine > 5:
-	# 			item_pred_cosine = 5
-
-	# 		if item_pred_jaccard < 0:
-	# 			item_pred_jaccard = 0
-
-	# 		if item_pred_jaccard > 5:
-	# 			item_pred_jaccard = 5
-
-	# 		if item_pred_pearson < 0:
-	# 			item_pred_pearson = 0
-
-	# 		if item_pred_pearson > 5:
-	# 			item_pred_pearson = 5
-
-	# 		#user-based
-	# 		if np.count_nonzero(M[user-1]):
-	# 			sim_cosine = sim_user_cosine[user-1]
-	# 			sim_jaccard = sim_user_jaccard[user-1]
-	# 			sim_pearson = sim_user_pearson[user-1]
-	# 			ind = (M[:,item-1] > 0)
-	# 			#ind[user-1] = False
-	# 			normal_cosine = np.sum(np.absolute(sim_cosine[ind]))
-	# 			normal_jaccard = np.sum(np.absolute(sim_jaccard[ind]))
-	# 			normal_pearson = np.sum(np.absolute(sim_pearson[ind]))
-	# 			if normal_cosine > 0:
-	# 				user_pred_cosine = np.dot(sim_cosine,M[:,item-1])/normal_cosine
-
-	# 			if normal_jaccard > 0:
-	# 				user_pred_jaccard = np.dot(sim_jaccard,M[:,item-1])/normal_jaccard
-
-	# 			if normal_pearson > 0:
-	# 				user_pred_pearson = np.dot(sim_pearson,M[:,item-1])/normal_pearson
-
-	# 		if user_pred_cosine < 0:
-	# 			user_pred_cosine = 0
-
-	# 		if user_pred_cosine > 5:
-	# 			user_pred_cosine = 5
-
-	# 		if user_pred_jaccard < 0:
-	# 			user_pred_jaccard = 0
-
-	# 		if user_pred_jaccard > 5:
-	# 			user_pred_jaccard = 5
-
-	# 		if user_pred_pearson < 0:
-	# 			user_pred_pearson = 0
-
-	# 		if user_pred_pearson > 5:
-	# 			user_pred_pearson = 5
-
-	# 		if (user_pred_cosine != 0 and user_pred_cosine != 5) and (item_pred_cosine != 0 and item_pred_cosine != 5):
-	# 			pred_cosine = (user_pred_cosine + item_pred_cosine)/2
-	# 		else:
-	# 			if (user_pred_cosine == 0 or user_pred_cosine == 5):
-	# 				if (item_pred_cosine != 0 and item_pred_cosine != 5):
-	# 					pred_cosine = item_pred_cosine
-	# 				else:
-	# 					pred_cosine = 3.0
-	# 			else:
-	# 				if (user_pred_cosine != 0 and user_pred_cosine != 5):
-	# 					pred_cosine = user_pred_cosine
-	# 				else:
-	# 					pred_cosine = 3.0
-
-	# 		if (user_pred_jaccard != 0 and user_pred_jaccard != 5) and (item_pred_jaccard != 0 and item_pred_jaccard != 5):
-	# 			pred_jaccard = (user_pred_jaccard + item_pred_jaccard)/2
-	# 		else:
-	# 			if (user_pred_jaccard == 0 or user_pred_jaccard == 5):
-	# 				if (item_pred_jaccard != 0 and item_pred_jaccard != 5):
-	# 					pred_jaccard = item_pred_jaccard
-	# 				else:
-	# 					pred_jaccard = 3.0
-	# 			else:
-	# 				if (user_pred_jaccard != 0 and user_pred_jaccard != 5):
-	# 					pred_jaccard = user_pred_jaccard
-	# 				else:
-	# 					pred_jaccard = 3.0
-
-	# 		if (user_pred_pearson != 0 and user_pred_pearson != 5) and (item_pred_pearson != 0 and item_pred_pearson != 5):
-	# 			pred_pearson = (user_pred_pearson + item_pred_pearson)/2
-	# 		else:
-	# 			if (user_pred_pearson == 0 or user_pred_pearson == 5):
-	# 				if (item_pred_pearson != 0 and item_pred_pearson != 5):
-	# 					pred_pearson = item_pred_pearson
-	# 				else:
-	# 					pred_pearson = 3.0
-	# 			else:
-	# 				if (user_pred_pearson != 0 and user_pred_pearson != 5):
-	# 					pred_pearson = user_pred_pearson
-	# 				else:
-	# 					pred_pearson = 3.0
-			
-	# 		#pred_cosine = (user_pred_cosine + item_pred_cosine)/2
-	# 		#pred_jaccard = (user_pred_jaccard + item_pred_jaccard)/2
-	# 		#pred_pearson = (user_pred_pearson + item_pred_pearson)/2
-	# 		print str(user) + "\t" + str(item) + "\t" + str(e[2]) + "\t" + str(pred_cosine) + "\t" + str(pred_jaccard) + "\t" + str(pred_pearson)
-	# 		pred_rate_cosine.append(pred_cosine)
-	# 		pred_rate_jaccard.append(pred_jaccard)
-	# 		pred_rate_pearson.append(pred_pearson)
-
-	# 	#print len(true_rate)
-	# 	#print len(pred_rate_cosine)
-	# 	rmse_cosine.append(sqrt(mean_squared_error(true_rate, pred_rate_cosine)))
-	# 	rmse_jaccard.append(sqrt(mean_squared_error(true_rate, pred_rate_jaccard)))
-	# 	rmse_pearson.append(sqrt(mean_squared_error(true_rate, pred_rate_pearson)))
-
-	# 	print str(sqrt(mean_squared_error(true_rate, pred_rate_cosine))) + "\t" + str(sqrt(mean_squared_error(true_rate, pred_rate_jaccard))) + "\t" + str(sqrt(mean_squared_error(true_rate, pred_rate_pearson)))
-	# 	#raw_input()
-
-	# #print sum(rms) / float(len(rms))
-	# rmse_cosine = sum(rmse_cosine) / float(len(rmse_cosine))
-	# rmse_pearson = sum(rmse_pearson) / float(len(rmse_pearson))
-	# rmse_jaccard = sum(rmse_jaccard) / float(len(rmse_jaccard))
-
-	# print str(rmse_cosine) + "\t" + str(rmse_jaccard) + "\t" + str(rmse_pearson)
-
-	# f_rmse = open("rmse_hybrid.txt","w")
-	# f_rmse.write(str(rmse_cosine) + "\t" + str(rmse_jaccard) + "\t" + str(rmse_pearson) + "\n")
-
-	# rmse = [rmse_cosine, rmse_jaccard, rmse_pearson]
-	# req_sim = rmse.index(min(rmse))
-
-	# print req_sim
-	# f_rmse.write(str(req_sim))
-	# f_rmse.close()
-
-	# if req_sim == 0:
-	# 	sim_mat_user = sim_user_cosine
-	# 	sim_mat_item = sim_item_cosine
-
-	# if req_sim == 1:
-	# 	sim_mat_user = sim_user_jaccard
-	# 	sim_mat_item = sim_item_jaccard
-
-	# if req_sim == 2:
-	# 	sim_mat_user = sim_user_pearson
-	# 	sim_mat_item = sim_item_pearson
-
-	#predictRating(data, sim_mat_user, sim_mat_item)
-	# return sim_mat_user, sim_mat_item
 	return sim_user_cosine, sim_item_cosine
 
 
@@ -370,7 +148,9 @@ def predictRating(data, user_data, item_data,mode='default'):
 	pred_rate = []
 
 	#fw = open('result3.csv','w')
-	fw_w = open('result3.csv','w')
+	# fw_w = open('result3.csv','w')
+  fw_w = open(resultfile,'w')  #resultfile --predicted rating
+	csvwriter = csv.writer(fw_w)
 
 	l = len(toBeRated["user"])
 	for e in range(l):
@@ -426,18 +206,24 @@ def predictRating(data, user_data, item_data,mode='default'):
 
 		#pred = (user_pred + item_pred)/2
 		pred_rate.append(pred)
-		print(str(user) + "," + str(item) + "," + str(pred))
-		#fw.write(str(user) + "," + str(item) + "," + str(pred) + "\n")
-		fw_w.write(str(pred) + "\n")
+		csvwriter.writerow([int(user),int(item),float(pred)])
 
 	#fw.close()
 	fw_w.close()
 
 #recommend_data = readingFile("ratings.csv")
-recommend_data = readingFile(sys.argv[1])
-user_data = userData(mode='default')
-item_data = itemData(mode='default')
-predictRating(recommend_data, user_data, item_data,mode='default')
+# recommend_data = readingFile(sys.argv[1])
+
+# predictRating(recommend_data, user_data, item_data,mode='default')
 #crossValidation(recommend_data, user_data, item_data)
 
 
+if __name__ == "__main__":
+	#recommend_data = readingFile("ratings.csv")
+	recommend_data = readingFile(sys.argv[1])
+	#crossValidation(recommend_data)
+	mode = sys.argv[3] #attack or default
+	resultfile = sys.argv[4]
+  	user_data = userData(mode=mode)
+  	item_data = itemData(mode=mode)
+	predictRating(recommend_data,resultfile=resultfile,mode=mode)

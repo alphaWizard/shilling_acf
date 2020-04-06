@@ -115,7 +115,7 @@ def prediction_shift(resultfile1,resultfile2):
         total_sum = total_sum + delta_item_map[item_id]
         total_count = total_count + 1
 
-    total_sum = abs(total_sum)
+    total_sum = total_sum
 
     
     print("Prediction shift for {} and {} is {}".format(resultfile1,resultfile2,float(total_sum)/float(total_count)))

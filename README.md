@@ -5,8 +5,8 @@ This repository contains an unofficial implementation of the paper [Shilling Rec
 
 Steps to run:
 1. python attack.py 30 push
-1. python itemBased.py ratings_updated.csv toberated_attack.csv default result_before.csv
-1. python itemBased.py ratings_updated_avg_attack.csv toberated_attack.csv attack result_after.csv
-1. python evaluation.py result_after.csv result_before.csv
+1. python userBased.py ratings_updated.csv toberated_attack.csv default result_before.csv
+1. python userBased.py ratings_updated_avg_attack.csv toberated_attack.csv attack result_after.csv 30
+1. python evaluation.py result_before.csv result_after.csv
 
-Note that above steps run the code for evalauting average attack with push intent on item-based cf algorithm. Last step gives the prediction shift value for the attack.
+Note that above steps run the code for evalauting average attack of 30 new users with push intent on user-based cf algorithm. Last step gives the prediction shift value for the attack.

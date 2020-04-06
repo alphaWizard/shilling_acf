@@ -11,7 +11,7 @@ import sys
 import csv
 #from sklearn.utils.extmath import np.dot
 
-warnings.simplefilter("error")
+warnings.simplefilter("ignore")
 
 # users = 943
 items = 1682
@@ -25,10 +25,10 @@ def readingFile(filename):
 		data.append(e)
 	return data
 
-def similarity_user(data,mode='default'):
-	print("Hello User")
+def similarity_user(data,mode='default',bots=30):
+	# print("Hello User")
 	if mode == 'attack':
-		users = 943 + 30
+		users = 943 + bots
 	else: 
 		users = 943
 	#f_i_d = open("sim_user_based.txt","w")
@@ -53,12 +53,12 @@ def similarity_user(data,mode='default'):
 	#f_i_d.close()
 	return user_similarity_cosine, user_similarity_jaccard, user_similarity_pearson
 
-def crossValidation(data,mode='default'):
+def crossValidation(data,mode='default',bots=30):
 	# k_fold = KFold(n=len(data), n_folds=10)
 	# k_fold = KFold(n_splits=10)
 	if mode == 'attack':
 		# print("here")
-		users = 943 + 30
+		users = 943 + bots
 	else:
 		users = 943
 
@@ -66,130 +66,15 @@ def crossValidation(data,mode='default'):
 	for e in data:
 		Mat[e[0]-1][e[1]-1] = e[2]
 
-	sim_user_cosine, sim_user_jaccard, sim_user_pearson = similarity_user(Mat,mode=mode)
+	sim_user_cosine, sim_user_jaccard, sim_user_pearson = similarity_user(Mat,mode=mode,bots=bots)
 	#sim_user_cosine, sim_user_jaccard, sim_user_pearson = np.random.rand(users,users), np.random.rand(users,users), np.random.rand(users,users)
 
-	'''sim_user_cosine = np.zeros((users,users))
-	sim_user_jaccard = np.zeros((users,users))
-	sim_user_pearson = np.zeros((users,users))
-
-	f_sim = open("sim_user_based.txt", "r")
-	for row in f_sim:
-		r = row.strip().split(',')
-		sim_user_cosine[int(r[0])][int(r[1])] = float(r[2])
-		sim_user_jaccard[int(r[0])][int(r[1])] = float(r[3])
-		sim_user_pearson[int(r[0])][int(r[1])] = float(r[4])
-	f_sim.close()'''
-
-	# rmse_cosine = []
-	# rmse_jaccard = []
-	# rmse_pearson = []
-
-	# for train_indices, test_indices in k_fold:
-	# 	train = [data[i] for i in train_indices]
-	# 	test = [data[i] for i in test_indices]
-
-	# 	M = np.zeros((users,items))
-
-	# 	for e in train:
-	# 		M[e[0]-1][e[1]-1] = e[2]
-
-	# 	true_rate = []
-	# 	pred_rate_cosine = []
-	# 	pred_rate_jaccard = []
-	# 	pred_rate_pearson = []
-
-	# 	for e in test:
-	# 		user = e[0]
-	# 		item = e[1]
-	# 		true_rate.append(e[2])
-
-	# 		pred_cosine = 3.0
-	# 		pred_jaccard = 3.0
-	# 		pred_pearson = 3.0
-
-	# 		#user-based
-	# 		if np.count_nonzero(M[user-1]):
-	# 			sim_cosine = sim_user_cosine[user-1]
-	# 			sim_jaccard = sim_user_jaccard[user-1]
-	# 			sim_pearson = sim_user_pearson[user-1]
-	# 			ind = (M[:,item-1] > 0)
-	# 			#ind[user-1] = False
-	# 			normal_cosine = np.sum(np.absolute(sim_cosine[ind]))
-	# 			normal_jaccard = np.sum(np.absolute(sim_jaccard[ind]))
-	# 			normal_pearson = np.sum(np.absolute(sim_pearson[ind]))
-	# 			if normal_cosine > 0:
-	# 				pred_cosine = np.dot(sim_cosine,M[:,item-1])/normal_cosine
-
-	# 			if normal_jaccard > 0:
-	# 				pred_jaccard = np.dot(sim_jaccard,M[:,item-1])/normal_jaccard
-
-	# 			if normal_pearson > 0:
-	# 				pred_pearson = np.dot(sim_pearson,M[:,item-1])/normal_pearson
-
-	# 		if pred_cosine < 0:
-	# 			pred_cosine = 0
-
-	# 		if pred_cosine > 5:
-	# 			pred_cosine = 5
-
-	# 		if pred_jaccard < 0:
-	# 			pred_jaccard = 0
-
-	# 		if pred_jaccard > 5:
-	# 			pred_jaccard = 5
-
-	# 		if pred_pearson < 0:
-	# 			pred_pearson = 0
-
-	# 		if pred_pearson > 5:
-	# 			pred_pearson = 5
-
-	# 		print(str(user) + "\t" + str(item) + "\t" + str(e[2]) + "\t" + str(pred_cosine) + "\t" + str(pred_jaccard) + "\t" + str(pred_pearson))
-	# 		pred_rate_cosine.append(pred_cosine)
-	# 		pred_rate_jaccard.append(pred_jaccard)
-	# 		pred_rate_pearson.append(pred_pearson)
-
-	# 	rmse_cosine.append(sqrt(mean_squared_error(true_rate, pred_rate_cosine)))
-	# 	rmse_jaccard.append(sqrt(mean_squared_error(true_rate, pred_rate_jaccard)))
-	# 	rmse_pearson.append(sqrt(mean_squared_error(true_rate, pred_rate_pearson)))
-
-	# 	print(str(sqrt(mean_squared_error(true_rate, pred_rate_cosine))) + "\t" + str(sqrt(mean_squared_error(true_rate, pred_rate_jaccard))) + "\t" + str(sqrt(mean_squared_error(true_rate, pred_rate_pearson))))
-		#raw_input()
-
-	#print sum(rms) / float(len(rms))
-	# rmse_cosine = sum(rmse_cosine) / float(len(rmse_cosine))
-	# rmse_pearson = sum(rmse_pearson) / float(len(rmse_pearson))
-	# rmse_jaccard = sum(rmse_jaccard) / float(len(rmse_jaccard))
-
-	# print(str(rmse_cosine) + "\t" + str(rmse_jaccard) + "\t" + str(rmse_pearson))
-
-	# f_rmse = open("rmse_user.txt","w")
-	# f_rmse.write(str(rmse_cosine) + "\t" + str(rmse_jaccard) + "\t" + str(rmse_pearson) + "\n")
-
-	# rmse = [rmse_cosine, rmse_jaccard, rmse_pearson]
-	# req_sim = rmse.index(min(rmse))
-
-	# print(req_sim)
-	# f_rmse.write(str(req_sim))
-	# f_rmse.close()
-
-	# if req_sim == 0:
-	# 	sim_mat_user = sim_user_cosine
-
-	# if req_sim == 1:
-	# 	sim_mat_user = sim_user_jaccard
-
-	# if req_sim == 2:
-	# 	sim_mat_user = sim_user_pearson
-
-	#predictRating(Mat, sim_mat_user)
 	return Mat, sim_user_cosine
 
 
-def predictRating(recommend_data,resultfile='result_user_based_before_attack.csv',mode='default'):
+def predictRating(recommend_data,resultfile='result_user_based_before_attack.csv',mode='default',bots=30):
 
-	M, sim_user = crossValidation(recommend_data,mode=mode)
+	M, sim_user = crossValidation(recommend_data,mode=mode,bots=bots)
 
 	#f = open("toBeRated.csv","r")
 	f = open(sys.argv[2],"r")   #toberated file
@@ -245,8 +130,10 @@ if __name__ == "__main__":
 	#recommend_data = readingFile("ratings.csv")
 	recommend_data = readingFile(sys.argv[1])
 	#crossValidation(recommend_data)
-	mode = sys.argv[3]
+	mode = sys.argv[3] #attack or default
 	resultfile = sys.argv[4]
-	# print(mode)
-	predictRating(recommend_data,resultfile=resultfile,mode=mode)
-
+	if len(sys.argv) > 5:
+		bots=int(sys.argv[5])
+	else:
+		bots = 30
+	predictRating(recommend_data,resultfile=resultfile,mode=mode,bots=bots)

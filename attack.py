@@ -5,6 +5,7 @@ import scipy.stats
 import matplotlib.pyplot as plt
 import csv
 import pickle
+import sys
 
 def my_distribution(min_val, max_val, mean, std, size):
     lower = min_val
@@ -158,10 +159,9 @@ if __name__ == "__main__":
 
     # filler_ratings = my_distribution(1.0,5.0,3.6,1.1,10)
     # print(filler_ratings)
+    no_of_bots = int(sys.argv[1])
+    intent = sys.argv[2]
 
-    randomAttack(target_item_set=target_item_set)
-    averageAttack(target_item_set=target_item_set)
-
-
-    
-
+    randomAttack(n_new_users=no_of_bots,intent=intent,target_item_set=target_item_set)
+    averageAttack(n_new_users=no_of_bots,intent=intent,target_item_set=target_item_set)
+	

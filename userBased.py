@@ -137,3 +137,10 @@ if __name__ == "__main__":
 	else:
 		bots = 30
 	predictRating(recommend_data,resultfile=resultfile,mode=mode,bots=bots)
+
+	if mode == 'attack':
+		print('Applied prediction on the attacked database...')
+	else:
+		print('Applied prediction on normal database...')
+
+	

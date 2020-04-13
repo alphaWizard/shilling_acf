@@ -163,5 +163,12 @@ if __name__ == "__main__":
     intent = sys.argv[2]
 
     randomAttack(n_new_users=no_of_bots,intent=intent,target_item_set=target_item_set)
+    print('Random Attack Successful...')
+    print('The new database after random attack is in ratings_updated_rand_attack.csv')
     averageAttack(n_new_users=no_of_bots,intent=intent,target_item_set=target_item_set)
+    print('Average Attack Successful...')
+    print('The new database after average attack is in ratings_updated_avg_attack.csv')
+    
+
+
     

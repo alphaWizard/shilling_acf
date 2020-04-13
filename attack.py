@@ -68,7 +68,7 @@ def randomAttack(n_new_users=30,intent="push",target_item_set=[]):
                 lines_to_be_added.append([new_user_id,item_id,filler_ratings[start]])
                 start = start + 1
 
-    with open('ratings_updated_rand_attack.csv','a') as csvfile:
+    with open('ratings_updated_rand_attack.csv','a', newline='') as csvfile:
         csvwriter = csv.writer(csvfile)
         csvwriter.writerows(lines_to_be_added)
 
@@ -125,7 +125,7 @@ def averageAttack(n_new_users=30,intent="push",target_item_set=[]):
 
 
 
-    with open('ratings_updated_avg_attack.csv','a') as csvfile:
+    with open('ratings_updated_avg_attack.csv','a', newline='') as csvfile:
         csvwriter = csv.writer(csvfile)
         csvwriter.writerows(lines_to_be_added)
 

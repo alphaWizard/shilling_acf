@@ -83,7 +83,7 @@ def predictRating(recommend_data,resultfile='result_item_based_before_attack.csv
 	pred_rate = []
 
 	#fw = open('result2.csv','w')
-	fw_w = open(resultfile,'w')  #resultfile --predicted rating
+	fw_w = open(resultfile,'w', newline='')  #resultfile --predicted rating
 	csvwriter = csv.writer(fw_w)
 
 	l = len(toBeRated["user"])

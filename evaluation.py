@@ -44,7 +44,7 @@ def evaluation(attackfilename = 'ratings_updated_rand_attack.csv',target_item_se
                 to_be_rated_list.append([int(user),int(item)])
 
     filename = 'toberated_attack.csv'
-    with open(filename,'w') as csvfile2:
+    with open(filename,'w',newline='') as csvfile2:
         csvwriter = csv.writer(csvfile2)
         csvwriter.writerows(to_be_rated_list)
 
